@@ -1,99 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2A321772-75B2-4601-A718-AF0A2370E6A8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NAPS2.Console</RootNamespace>
-    <AssemblyName>NAPS2.Console</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <LangVersion>latest</LangVersion>
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'InstallerEXE|x86'">
-    <OutputPath>bin\InstallerEXE\</OutputPath>
-    <DefineConstants>TRACE;INSTALLER INSTALLER_EXE</DefineConstants>
-    <Optimize>false</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'InstallerMSI|x86'">
-    <OutputPath>bin\InstallerMSI\</OutputPath>
-    <DefineConstants>TRACE;INSTALLER INSTALLER_MSI</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Standalone|x86' ">
-    <OutputPath>bin\Standalone\</OutputPath>
-    <DefineConstants>TRACE;STANDALONE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
+    <TargetFramework>net48</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <Description></Description>
+    <Product>NAPS2 (Not Another PDF Scanner 2)</Product>
+    <Copyright>Copyright 2009, 2012-2018 NAPS2 Contributors; Icons from http://www.fatcow.com/free-icons</Copyright>
+    <Version>6.1.2.0</Version>
+    <Platforms>x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Runtime" />
-    <Reference Include="System.Threading.Tasks" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NAPS2.Core\NAPS2.Core.csproj">
-      <Project>{968378fa-a649-4058-a928-1fcd97b23070}</Project>
-      <Name>NAPS2.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NAPS2.DI\NAPS2.DI.csproj">
-      <Project>{4d349529-149b-498b-8a55-373e6a67e1f0}</Project>
-      <Name>NAPS2.DI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NAPS2.Worker\NAPS2.Worker.csproj">
-      <Project>{ba9a65a0-00fe-4bf4-a023-7d804817453f}</Project>
-      <Name>NAPS2.Worker</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\NAPS2.Core\NAPS2.Core.csproj" />
+    <ProjectReference Include="..\NAPS2.DI\NAPS2.DI.csproj" />
+    <ProjectReference Include="..\NAPS2.Worker\NAPS2.Worker.csproj" />
   </ItemGroup>
   <ItemGroup>
     <ContentWithTargetPath Include="..\NAPS2\Setup\lib\dbg\64\NAPS2.WIA.dll">
@@ -128,21 +46,4 @@
       <Version>4.7.6</Version>
     </PackageReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT'">call "%25vsappiddir%25..\..\VC\Auxiliary\Build\vcvars32.bat" x86
-editbin /LARGEADDRESSAWARE "$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <Import Project="..\NAPS2\Setup\CommonTargets.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>call "$(MSBuildBinPath)\..\..\..\VC\Auxiliary\Build\vcvars32.bat" x86
-editbin /LARGEADDRESSAWARE "$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

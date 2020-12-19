@@ -9,6 +9,7 @@ using NUnit.Framework;
 namespace NAPS2.Tests.Unit
 {
     [TestFixture(Category = "unit,fast")]
+    [Platform(Exclude = "Win")]
     class SaneOptionParserTests
     {
         [Test]

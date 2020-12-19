@@ -61,7 +61,7 @@ namespace NAPS2.Dependencies
 
             private static void Extract(string zipFilePath, string outDir)
             {
-                using (var zip = new ZipFile(zipFilePath))
+                using (var zip = new ICSharpCode.SharpZipLib.Zip.ZipFile(zipFilePath))
                 {
                     foreach (ZipEntry entry in zip)
                     {

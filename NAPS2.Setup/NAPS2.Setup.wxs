@@ -16,17 +16,25 @@
     <MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_Mondo" />
     <WixVariable Id="WixUILicenseRtf" Value="..\NAPS2\Setup\license.rtf" />
 
     <Feature Id="MainApplication" Title="NAPS2" Level="1">
       <ComponentRef Id="Exec" />
+      <Feature Id="featCore" Title="NAPS.Core" Absent="disallow">
+        <ComponentRef Id="cmpCore" />        
+      </Feature>
       <ComponentRef Id="Deps" />
       <ComponentRef Id="Deps64" />
       <ComponentRef Id="twaindsm" />
       <ComponentRef Id="ApplicationShortcut" />
       <ComponentRef Id="RegistryEntries" />
-      <ComponentGroupRef Id="LangComponents" />
+      <!--<ComponentGroupRef Id="LangComponents" />-->
+      <Feature Id="Languages" Title="Localization">
+        <Feature Id="featLangAF" Title="Afrikaans">
+          <ComponentRef Id="cmpLangAF" />
+        </Feature>
+      </Feature>
     </Feature>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -35,6 +43,13 @@
           <Directory Id="LIBFOLDER" Name="lib">
             <Directory Id="LIB64FOLDER" Name="64" />
           </Directory>
+
+          <Directory Id="LANG_AF_FOLDER" Name="af">
+            <Component Id="cmpLangAF" Guid="01904DBB-7E60-4C1D-9E87-FBEAA4800525">
+              <File Source="$(var.NAPS2.TargetDir)af\NAPS2.Core.Resources.dll" KeyPath="yes" />
+            </Component>
+          </Directory>
+       
         </Directory>
       </Directory>
       <Directory Id="ProgramMenuFolder">
@@ -66,12 +81,12 @@
     <DirectoryRef Id="INSTALLFOLDER">
       <Component Id="Exec" Guid="3ED24800-E1D9-4D64-A106-6DC3597D9266">
         <!-- EXEs -->
-        <File Source="..\NAPS2\bin\InstallerMSI\NAPS2.exe" />
-        <File Source="..\NAPS2\bin\InstallerMSI\NAPS2.exe.config" />
-        <File Source="..\NAPS2.Console\bin\InstallerMSI\NAPS2.Console.exe" />
-        <File Source="..\NAPS2.Console\bin\InstallerMSI\NAPS2.Console.exe.config" />
-        <File Source="..\NAPS2.Worker\bin\InstallerMSI\NAPS2.Worker.exe" />
-        <File Source="..\NAPS2.Worker\bin\InstallerMSI\NAPS2.Worker.exe.config" />
+        <File Source="$(var.NAPS2.TargetDir)NAPS2.exe" />
+        <File Source="$(var.NAPS2.TargetDir)NAPS2.exe.config" />
+        <File Source="$(var.NAPS2.Console.TargetDir)NAPS2.Console.exe" />
+        <File Source="$(var.NAPS2.Console.TargetDir)NAPS2.Console.exe.config" />
+        <File Source="$(var.NAPS2.TargetDir)NAPS2.Worker.exe" />
+        <File Source="$(var.NAPS2.TargetDir)NAPS2.Worker.exe.config" />
         <!-- Configuration -->
         <File Source="..\NAPS2\appsettings.xml" />
         <!-- License -->
@@ -80,28 +95,24 @@
       </Component>
     </DirectoryRef>
     
-    <DirectoryRef Id="LIBFOLDER">
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="cmpCore" Guid="94545014-73F0-4E8A-B266-4832551DED3E">
+        <File Source="$(var.NAPS2.Core.TargetDir)NAPS2.Core.dll" />
+        <File Source="$(var.NAPS2.Core.TargetDir)NAPS2.Core.dll.config" />
+      </Component>
       <Component Id="Deps" Guid="04AC2B17-BDFA-4AA0-B8CA-0AE208D9193A">
         <!-- Dependencies -->
-        <File Source="..\NAPS2\bin\InstallerMSI\NAPS2.Core.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\NAPS2.DI.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\CommandLine.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\Ghostscript.NET.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\ICSharpCode.SharpZipLib.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\Microsoft.Threading.Tasks.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\Microsoft.Threading.Tasks.Extensions.Desktop.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\Microsoft.Threading.Tasks.Extensions.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\MimeKit.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\Newtonsoft.Json.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\Ninject.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\NLog.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\NTwain.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\PdfSharp.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\System.IO.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\System.Runtime.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\System.Threading.Tasks.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\System.ValueTuple.dll" />
-        <File Source="..\NAPS2\bin\InstallerMSI\zxing.dll" />
+        <File Source="$(var.NAPS2.TargetDir)NAPS2.DI.dll" />
+        <File Source="$(var.NAPS2.TargetDir)CommandLine.dll" />
+        <File Source="$(var.NAPS2.TargetDir)Ghostscript.NET.dll" />
+        <File Source="$(var.NAPS2.TargetDir)ICSharpCode.SharpZipLib.dll" />
+        <File Source="$(var.NAPS2.TargetDir)MimeKit.dll" />
+        <File Source="$(var.NAPS2.TargetDir)Newtonsoft.Json.dll" />
+        <File Source="$(var.NAPS2.TargetDir)Ninject.dll" />
+        <File Source="$(var.NAPS2.TargetDir)NLog.dll" />
+        <File Source="$(var.NAPS2.TargetDir)NTwain.dll" />
+        <File Source="$(var.NAPS2.TargetDir)PdfSharp.dll" />
+        <File Source="$(var.NAPS2.TargetDir)zxing.dll" />
         <File Source="..\NAPS2\Setup\lib\NAPS2.WIA.dll" />
       </Component>
     </DirectoryRef>

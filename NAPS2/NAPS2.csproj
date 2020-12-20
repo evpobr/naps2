@@ -6,14 +6,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Platforms>x86</Platforms>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'ReleaseInstallerEXE' Or '$(Configuration)' == 'ReleaseInstallerMSI'">
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <TransformOnBuild>true</TransformOnBuild>
-    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
-    <TransformOutOfDateOnly>false</TransformOutOfDateOnly>
-  </PropertyGroup>
-  <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
   <ItemGroup>
     <None Include="Setup\Build-Test.ps1" />
     <None Include="Setup\Test-Lang.ps1" />
@@ -92,7 +84,4 @@
     <Product>NAPS2 (Not Another PDF Scanner 2)</Product>
     <Copyright>Copyright 2009, 2012-2018 NAPS2 Contributors; Icons from http://www.fatcow.com/free-icons</Copyright>
   </PropertyGroup>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="&quot;$(DevEnvDir)TextTransform.exe&quot; -out &quot;$(ProjectDir)/Setup/LanguageComponents.wxs&quot; &quot;$(ProjectDir)/Setup/LanguageComponents.tt&quot;" />
-  </Target>
 </Project>

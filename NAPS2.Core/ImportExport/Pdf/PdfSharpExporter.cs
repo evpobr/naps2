@@ -217,7 +217,8 @@ namespace NAPS2.ImportExport.Pdf
 
                     if (!ocrRequestQueue.HasCachedResult(ocrEngine, snapshot, ocrParams))
                     {
-                        img.GdiImage.Save(tempImageFilePath);
+                        Image gdiImage = Image.FromStream(stream);
+                        gdiImage.Save(tempImageFilePath);
                     }
                 }
 

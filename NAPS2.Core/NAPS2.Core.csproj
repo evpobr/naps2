@@ -32,9 +32,6 @@
     <DefineConstants>DEBUG;TRACE;NONWINDOWS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PdfSharp">
-      <HintPath>..\NAPS2\Setup\lib\PdfSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +207,7 @@
       <Version>0.16.6</Version>
     </PackageReference>
     <PackageReference Include="NTwain" Version="3.6.0" />
+    <PackageReference Include="PdfSharp" Version="1.50.5147" />
   </ItemGroup>
   <PropertyGroup>
     <PreBuildEvent Condition="'$(OS)' == 'Windows_NT'">If Not Exist $(ProjectDir)google.credentials.json (

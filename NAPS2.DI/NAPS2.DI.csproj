@@ -5,6 +5,7 @@
     <Version>6.1.2.0</Version>
     <UseWindowsForms>true</UseWindowsForms>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Configurations>Debug;Release;Any CPU</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAPS2.Core\NAPS2.Core.csproj" />

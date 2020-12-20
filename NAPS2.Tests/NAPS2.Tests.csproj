@@ -3,6 +3,7 @@
     <TargetFramework>net48</TargetFramework>
     <Copyright>Copyright ©  2014</Copyright>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Configurations>Debug;Release;Any CPU</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PdfSharp">

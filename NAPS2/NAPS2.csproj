@@ -4,7 +4,8 @@
     <OutputType>WinExe</OutputType>
     <ApplicationIcon>scanner-app.ico</ApplicationIcon>
     <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>x86</Platforms>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Setup\Build-Test.ps1" />

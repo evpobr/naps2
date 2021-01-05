@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using EventArgs = System.EventArgs;
 
@@ -27,9 +28,15 @@ namespace NAPS2.Scan.Wia.Native
 
         public bool Download()
         {
-            var hr = Version == WiaVersion.Wia10
-                ? NativeWiaMethods.Download1(Handle, TransferStatusCallback)
-                : NativeWiaMethods.Download2(Handle, TransferStatusCallback);
+            uint hr = 0;
+            if (Version == WiaVersion.Wia10)
+            {
+                hr = NativeWiaMethods.Download1((IWiaDataTransfer)Marshal.GetObjectForIUnknown(Handle), TransferStatusCallback);
+            }
+            else
+            {
+                hr = NativeWiaMethods.Download2((IWiaTransfer)Marshal.GetObjectForIUnknown(Handle), TransferStatusCallback);
+            }
             if (hr == 1)
             {
                 // User cancelled

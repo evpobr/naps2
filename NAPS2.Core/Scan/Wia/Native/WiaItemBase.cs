@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace NAPS2.Scan.Wia.Native
 {
@@ -18,7 +19,7 @@ namespace NAPS2.Scan.Wia.Native
             {
                 if (properties == null)
                 {
-                    WiaException.Check(NativeWiaMethods.GetItemPropertyStorage(Handle, out var propStorage));
+                    WiaException.Check(NativeWiaMethods.GetItemPropertyStorage(Marshal.GetObjectForIUnknown(Handle), out var propStorage));
                     properties = new WiaPropertyCollection(Version, propStorage);
                 }
                 return properties;
@@ -29,8 +30,8 @@ namespace NAPS2.Scan.Wia.Native
         {
             var items = new List<WiaItem>();
             WiaException.Check(Version == WiaVersion.Wia10
-                ? NativeWiaMethods.EnumerateItems1(Handle, itemHandle => items.Add(new WiaItem(Version, itemHandle)))
-                : NativeWiaMethods.EnumerateItems2(Handle, itemHandle => items.Add(new WiaItem(Version, itemHandle))));
+                ? NativeWiaMethods.EnumerateItems1((IWiaItem)Marshal.GetObjectForIUnknown(Handle), itemHandle => items.Add(new WiaItem(Version, Marshal.GetIUnknownForObject(itemHandle))))
+                : NativeWiaMethods.EnumerateItems2((IWiaItem2)Marshal.GetObjectForIUnknown(Handle), itemHandle => items.Add(new WiaItem(Version, Marshal.GetIUnknownForObject(itemHandle)))));
             return items;
         }
 

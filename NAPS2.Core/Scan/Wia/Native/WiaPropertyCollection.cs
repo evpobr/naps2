@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NAPS2.Util;
 
 namespace NAPS2.Scan.Wia.Native
@@ -10,11 +11,11 @@ namespace NAPS2.Scan.Wia.Native
     {
         private readonly Dictionary<int, WiaProperty> propertyDict;
 
-        public WiaPropertyCollection(WiaVersion version, IntPtr propertyStorageHandle) : base(version, propertyStorageHandle)
+        public WiaPropertyCollection(WiaVersion version, IWiaPropertyStorage propertyStorageHandle) : base(version, Marshal.GetIUnknownForObject(propertyStorageHandle))
         {
             propertyDict = new Dictionary<int, WiaProperty>();
-            WiaException.Check(NativeWiaMethods.EnumerateProperties(Handle,
-                (id, name, type) => propertyDict.Add(id, new WiaProperty(Handle, id, name, type))));
+            WiaException.Check(NativeWiaMethods.EnumerateProperties((IWiaPropertyStorage)Marshal.GetObjectForIUnknown(Handle),
+                (id, name, type) => propertyDict.Add(id, new WiaProperty((IWiaPropertyStorage)Marshal.GetObjectForIUnknown(Handle), id, name, type))));
         }
         
         public WiaProperty this[int propId] => propertyDict.Get(propId);

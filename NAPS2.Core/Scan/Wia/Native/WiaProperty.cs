@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace NAPS2.Scan.Wia.Native
 {
@@ -8,7 +9,7 @@ namespace NAPS2.Scan.Wia.Native
     {
         private WiaPropertyAttributes attributes;
 
-        protected internal WiaProperty(IntPtr storage, int id, string name, ushort type)
+        protected internal WiaProperty(IWiaPropertyStorage storage, int id, string name, ushort type)
         {
             Storage = storage;
             Id = id;
@@ -16,7 +17,7 @@ namespace NAPS2.Scan.Wia.Native
             Type = type;
         }
 
-        private IntPtr Storage { get; }
+        private IWiaPropertyStorage Storage { get; }
 
         public int Id { get; set; }
 
@@ -28,6 +29,7 @@ namespace NAPS2.Scan.Wia.Native
         {
             get
             {
+
                 if (Type == WiaPropertyType.I4)
                 {
                     WiaException.Check(NativeWiaMethods.GetPropertyInt(Storage, Id, out int value));

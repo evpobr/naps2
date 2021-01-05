@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace NAPS2.Scan.Wia.Native
 {
@@ -16,9 +17,17 @@ namespace NAPS2.Scan.Wia.Native
 
         public WiaDeviceManager(WiaVersion version) : base(version)
         {
-            WiaException.Check(Version == WiaVersion.Wia10
-                ? NativeWiaMethods.GetDeviceManager1(out var handle)
-                : NativeWiaMethods.GetDeviceManager2(out handle));
+            var handle = IntPtr.Zero;
+            if (Version == WiaVersion.Wia10)
+            {
+                WiaException.Check(NativeWiaMethods.GetDeviceManager1(out var deviceManager));
+                handle = Marshal.GetIUnknownForObject(deviceManager);
+            }
+            else
+            {
+                WiaException.Check(NativeWiaMethods.GetDeviceManager2(out var deviceManager));
+                handle = Marshal.GetIUnknownForObject(deviceManager);
+            }
             Handle = handle;
         }
 
@@ -29,25 +38,53 @@ namespace NAPS2.Scan.Wia.Native
         public IEnumerable<WiaDeviceInfo> GetDeviceInfos()
         {
             List<WiaDeviceInfo> result = new List<WiaDeviceInfo>();
-            WiaException.Check(Version == WiaVersion.Wia10
-                ? NativeWiaMethods.EnumerateDevices1(Handle, x => result.Add(new WiaDeviceInfo(Version, x)))
-                : NativeWiaMethods.EnumerateDevices2(Handle, x => result.Add(new WiaDeviceInfo(Version, x))));
+            if (Version == WiaVersion.Wia10)
+            {
+                var deviceManager = (IWiaDevMgr)Marshal.GetObjectForIUnknown(Handle);
+                WiaException.Check(NativeWiaMethods.EnumerateDevices1(deviceManager, x => result.Add(new WiaDeviceInfo(Version, x))));
+            }
+            else
+            {
+                var deviceManager = (IWiaDevMgr2)Marshal.GetObjectForIUnknown(Handle);
+                WiaException.Check(NativeWiaMethods.EnumerateDevices2(deviceManager, x => result.Add(new WiaDeviceInfo(Version, x))));
+            }
             return result;
         }
 
         public WiaDevice FindDevice(string deviceID)
         {
-            WiaException.Check(Version == WiaVersion.Wia10
-                ? NativeWiaMethods.GetDevice1(Handle, deviceID, out var deviceHandle)
-                : NativeWiaMethods.GetDevice2(Handle, deviceID, out deviceHandle));
+            IntPtr deviceHandle;
+            if (Version == WiaVersion.Wia10)
+            {
+                var deviceManager = (IWiaDevMgr)Marshal.GetObjectForIUnknown(Handle);
+                WiaException.Check(NativeWiaMethods.GetDevice1(deviceManager, deviceID, out var device));
+                deviceHandle = Marshal.GetIUnknownForObject(device);
+            }
+            else
+            {
+                var deviceManager = (IWiaDevMgr2)Marshal.GetObjectForIUnknown(Handle);
+                WiaException.Check(NativeWiaMethods.GetDevice2(deviceManager, deviceID, out var device));
+                deviceHandle = Marshal.GetIUnknownForObject(device);
+            }
             return new WiaDevice(Version, deviceHandle);
         }
 
         public WiaDevice PromptForDevice(IntPtr parentWindowHandle)
         {
-            var hr = Version == WiaVersion.Wia10
-                ? NativeWiaMethods.SelectDevice1(Handle, parentWindowHandle, SCANNER_DEVICE_TYPE, SELECT_DEVICE_NODEFAULT, out _, out var deviceHandle)
-                : NativeWiaMethods.SelectDevice2(Handle, parentWindowHandle, SCANNER_DEVICE_TYPE, SELECT_DEVICE_NODEFAULT, out _, out deviceHandle);
+            uint hr;
+            IntPtr deviceHandle;
+            if (Version == WiaVersion.Wia10)
+            {
+                var deviceManager = (IWiaDevMgr)Marshal.GetObjectForIUnknown(Handle);
+                hr = NativeWiaMethods.SelectDevice1(deviceManager, parentWindowHandle, SCANNER_DEVICE_TYPE, SELECT_DEVICE_NODEFAULT, out _, out var device);
+                deviceHandle = Marshal.GetIUnknownForObject(device);
+            }
+            else
+            {
+                var deviceManager = (IWiaDevMgr2)Marshal.GetObjectForIUnknown(Handle);
+                hr = NativeWiaMethods.SelectDevice2(deviceManager, parentWindowHandle, SCANNER_DEVICE_TYPE, SELECT_DEVICE_NODEFAULT, out _, out var device);
+                deviceHandle = Marshal.GetIUnknownForObject(device);
+            }
             if (hr == 1)
             {
                 return null;
@@ -62,9 +99,18 @@ namespace NAPS2.Scan.Wia.Native
             IntPtr itemHandle = IntPtr.Zero;
             int fileCount = 0;
             string[] filePaths = new string[10];
-            var hr = Version == WiaVersion.Wia10
-                ? NativeWiaMethods.GetImage1(Handle, parentWindowHandle, SCANNER_DEVICE_TYPE, 0, 0, Path.Combine(Paths.Temp, fileName), IntPtr.Zero)
-                : NativeWiaMethods.GetImage2(Handle, 0, device.Id(), parentWindowHandle, Paths.Temp, fileName, ref fileCount, ref filePaths, ref itemHandle);
+            uint hr = 0;
+            if (Version == WiaVersion.Wia10)
+            {
+                var deviceManager = (IWiaDevMgr)Marshal.GetObjectForIUnknown(Handle);
+                hr = NativeWiaMethods.GetImage1(deviceManager, parentWindowHandle, SCANNER_DEVICE_TYPE, 0, 0, Path.Combine(Paths.Temp, fileName), null);
+            }
+            else
+            {
+                var deviceManager = (IWiaDevMgr2)Marshal.GetObjectForIUnknown(Handle);
+                IWiaItem2 item = null;
+                hr = NativeWiaMethods.GetImage2(deviceManager, 0, device.Id(), parentWindowHandle, Paths.Temp, fileName, ref fileCount, ref filePaths, ref item);
+            }
             if (hr == 1)
             {
                 return null;

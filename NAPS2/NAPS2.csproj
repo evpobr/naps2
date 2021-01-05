@@ -35,22 +35,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LanguageComponents.tt</DependentUpon>
     </Content>
-    <ContentWithTargetPath Include="Setup\lib\dbg\64\NAPS2.WIA.dll">
-      <CopyToOutputDirectory Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugLang' ">PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>64\NAPS2.WIA.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Setup\lib\64\NAPS2.WIA.dll">
-      <CopyToOutputDirectory Condition=" '$(Configuration)' != 'Debug' And '$(Configuration)' != 'DebugLang' ">PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>64\NAPS2.WIA.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Setup\lib\dbg\NAPS2.WIA.dll">
-      <CopyToOutputDirectory Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugLang' ">PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>NAPS2.WIA.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="Setup\lib\NAPS2.WIA.dll">
-      <CopyToOutputDirectory Condition=" '$(Configuration)' != 'Debug' And '$(Configuration)' != 'DebugLang' ">PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>NAPS2.WIA.dll</TargetPath>
-    </ContentWithTargetPath>
     <Content Include="Setup\lib\64\twaindsm.dll" />
     <!--<Content Include="Setup\lib\NTwain.dll" />-->
     <Content Include="Setup\lib\twaindsm.dll" />

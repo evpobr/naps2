@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace NAPS2.Scan.Wia.Native
 {
@@ -12,9 +13,17 @@ namespace NAPS2.Scan.Wia.Native
         
         public WiaTransfer StartTransfer()
         {
-            WiaException.Check(Version == WiaVersion.Wia10
-                ? NativeWiaMethods.StartTransfer1(Handle, out var transferHandle)
-                : NativeWiaMethods.StartTransfer2(Handle, out transferHandle));
+            IntPtr transferHandle = IntPtr.Zero;
+            if (Version == WiaVersion.Wia10)
+            {
+                WiaException.Check(NativeWiaMethods.StartTransfer1((IWiaItem)Marshal.GetObjectForIUnknown(Handle), out var transfer));
+                transferHandle = Marshal.GetIUnknownForObject(transfer);
+            }
+            else
+            {
+                WiaException.Check(NativeWiaMethods.StartTransfer2((IWiaItem2)Marshal.GetObjectForIUnknown(Handle), out var transfer));
+                transferHandle = Marshal.GetIUnknownForObject(transfer);
+            }
             return new WiaTransfer(Version, transferHandle);
         }
     }
